@@ -22,6 +22,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Alinhar com a main
+        run: |
+          git config user.name "radar-concursos-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git rebase origin/main
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -37,16 +44,13 @@ jobs:
 
       - name: Commit do banco atualizado
         run: |
-          git config user.name "radar-concursos-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git rebase origin/main
           cp data/concurso.db api/data/concurso.db
           python -c "import sqlite3; c = sqlite3.connect('api/data/concurso.db'); c.execute('PRAGMA journal_mode=DELETE'); c.close()"
           git add data/concurso.db api/data/concurso.db
-          if git diff --cached --quiet; then
-            echo "Nenhuma mudanca no banco"
-          else
+          if ! git diff --cached --quiet; then
             git commit -m "coleta automatica $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git pull --rebase origin main
             git push
+          else
+            echo "Nenhuma mudanca no banco"
           fi
