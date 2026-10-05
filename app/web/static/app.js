@@ -23,10 +23,21 @@ function fmtQuando(iso) {
   const d0 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const h0 = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
   const dias = Math.round((h0 - d0) / umDia);
-  if (dias === 0) return "hoje";
-  if (dias === 1) return "ontem";
+  const hora = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  if (dias === 0) return `hoje às ${hora}`;
+  if (dias === 1) return `ontem às ${hora}`;
   if (dias < 7) return `${dias} dias atrás`;
-  return d.toLocaleDateString("pt-BR");
+  return `${d.toLocaleDateString("pt-BR")} às ${hora}`;
+}
+
+function renderUltimaColeta(ultimaColeta) {
+  const el = document.getElementById("ultima-coleta");
+  const valores = Object.values(ultimaColeta || {}).filter(Boolean).sort();
+  if (!valores.length) {
+    el.textContent = "Última busca: ainda não realizada — clique em ⟳ Buscar agora";
+    return;
+  }
+  el.textContent = `Última busca: ${fmtQuando(valores[valores.length - 1])}`;
 }
 
 function eNovo(iso) {
@@ -117,6 +128,7 @@ async function carregarMeta() {
   const r = await fetch("/api/meta");
   const meta = await r.json();
   renderStats(meta);
+  renderUltimaColeta(meta.ultima_coleta);
   const preencher = (id, valores, atual) => {
     const sel = document.getElementById(id);
     sel.querySelectorAll("option:not([value=''])").forEach(o => o.remove());
