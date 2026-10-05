@@ -4,7 +4,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 PDF_DIR = DATA_DIR / "editais"
-DB_PATH = DATA_DIR / "concurso.db"
+# No serverless (Vercel) o entrypoint aponta o banco para a copia dentro de api/
+DB_PATH = Path(os.environ.get("CONCURSO_DB_PATH", str(DATA_DIR / "concurso.db")))
 
 UA = "Mozilla/5.0 (compatible; RadarConcursos/0.1; monitor pessoal de concursos publicos)"
 TIMEOUT = 45

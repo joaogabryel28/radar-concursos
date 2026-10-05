@@ -46,6 +46,26 @@ def api_meta():
     }
 
 
+@router.get("/debug-fs")
+def api_debug_fs():
+    """TEMPORARIO: diagnostico do filesystem do serverless."""
+    import os
+    raiz = "/var/task"
+
+    def listar(p):
+        try:
+            return os.listdir(p)
+        except Exception as e:
+            return f"ERRO: {type(e).__name__}: {e}"
+
+    return {
+        "raiz": sorted(listar(raiz))[:40],
+        "api": sorted(listar(raiz + "/api"))[:20],
+        "data_raiz": listar(raiz + "/data"),
+        "data_api": listar(raiz + "/api/data"),
+    }
+
+
 @router.post("/coletar")
 def api_coletar(fontes: str = None):
     if EM_VERCEL:

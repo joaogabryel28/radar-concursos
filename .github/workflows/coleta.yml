@@ -40,7 +40,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git rebase origin/main
-          git add data/concurso.db
+          cp data/concurso.db api/data/concurso.db
+          git add data/concurso.db api/data/concurso.db
           if git diff --cached --quiet; then
             echo "Nenhuma mudanca no banco"
           else
