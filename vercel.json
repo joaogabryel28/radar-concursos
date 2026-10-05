@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.py": {
-      "includeFiles": "app/**, data/concurso.db",
+      "includeFiles": "app/**,data/concurso.db",
       "maxDuration": 15
     }
   },
