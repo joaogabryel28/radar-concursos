@@ -59,8 +59,9 @@ CREATE TABLE IF NOT EXISTS execucoes (
 
 def conectar() -> sqlite3.Connection:
     if EM_VERCEL:
-        # filesystem do serverless e somente-leitura: abre o banco embutido no deploy
-        c = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True, timeout=30)
+        # filesystem do serverless e somente-leitura: immutable=1 dispensa a
+        # criacao de -shm/-wal (impossivel em ro), exigida por bancos em modo WAL
+        c = sqlite3.connect(f"file:{DB_PATH}?mode=ro&immutable=1", uri=True, timeout=30)
     else:
         c = sqlite3.connect(DB_PATH, timeout=30)
         c.execute("PRAGMA journal_mode=WAL")

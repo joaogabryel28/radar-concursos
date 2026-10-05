@@ -41,6 +41,7 @@ jobs:
           git fetch origin main
           git rebase origin/main
           cp data/concurso.db api/data/concurso.db
+          python -c "import sqlite3; c = sqlite3.connect('api/data/concurso.db'); c.execute('PRAGMA journal_mode=DELETE'); c.close()"
           git add data/concurso.db api/data/concurso.db
           if git diff --cached --quiet; then
             echo "Nenhuma mudanca no banco"
