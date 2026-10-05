@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.vercel/
+.zcode/
+data/editais/
+data/concurso.db-wal
+data/concurso.db-shm

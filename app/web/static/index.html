@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radar Concursos — editais abertos e previstos</title>
+  <link rel="stylesheet" href="/static/style.css?v=2">
+</head>
+<body>
+  <header class="topo">
+    <div class="brand"><span class="dot"></span><h1>Radar Concursos</h1></div>
+    <p class="sub">Editais abertos e concursos previstos, monitorados automaticamente</p>
+  </header>
+
+  <section class="stats" id="stats"></section>
+
+  <nav class="tabs" id="tabs">
+    <button data-aba="abertas" class="ativo">Inscrições abertas</button>
+    <button data-aba="publicados">Editais publicados</button>
+    <button data-aba="previstos">Previstos e autorizados</button>
+    <button data-aba="todos">Todos</button>
+  </nav>
+
+  <div class="filtros" id="filtros">
+    <select id="f-uf"><option value="">Estado</option></select>
+    <select id="f-area"><option value="">Área</option></select>
+    <select id="f-curso"><option value="">Curso</option></select>
+    <select id="f-nivel">
+      <option value="">Nível</option>
+      <option value="federal">Federal</option>
+      <option value="estadual">Estadual</option>
+      <option value="municipal">Municipal</option>
+    </select>
+    <input id="f-q" type="search" placeholder="Buscar órgão ou palavra-chave…">
+    <button id="btn-limpar" title="Limpar todos os filtros">✕ Limpar</button>
+    <button id="btn-coletar" title="Forçar uma coleta das fontes agora">⟳ Buscar agora</button>
+  </div>
+
+  <main id="lista"></main>
+
+  <div class="toast" id="toast"></div>
+
+  <footer>
+    Fontes monitoradas: DOU · Querido Diário · FCC · IBFC · Google Notícias.
+    Os dados são um alerta inicial — <strong>confira sempre o edital oficial</strong> antes de se inscrever.
+  </footer>
+
+  <script src="/static/app.js?v=2"></script>
+</body>
+</html>

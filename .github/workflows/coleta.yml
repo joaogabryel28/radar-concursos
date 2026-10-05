@@ -1,0 +1,47 @@
+name: Coleta de concursos
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"  # a cada 3 horas (horario UTC)
+  workflow_dispatch:
+  repository_dispatch:
+    types: [coleta-manual]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coleta
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Rodar coleta
+        run: python cli.py collect
+        env:
+          PYTHONUTF8: "1"
+
+      - name: Commit do banco atualizado
+        run: |
+          git config user.name "radar-concursos-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/concurso.db
+          if git diff --cached --quiet; then
+            echo "Nenhuma mudanca no banco"
+          else
+            git commit -m "coleta automatica $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git push
+          fi
