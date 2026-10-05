@@ -20,11 +20,12 @@ def api_concursos(
     nivel: str = None,
     q: str = None,
     novos: int = None,
+    ordem: str = Query("recentes", pattern="^(recentes|antigos)$"),
     limite: int = Query(200, ge=1, le=500),
 ):
     itens = database.listar_concursos(
         aba=aba, uf=uf, area=area, curso=curso, nivel=nivel,
-        q=q, novos_dias=novos, limite=limite,
+        q=q, novos_dias=novos, ordem=ordem, limite=limite,
     )
     return {"total": len(itens), "itens": itens}
 

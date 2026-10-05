@@ -186,7 +186,7 @@ def _linhas_para_dicts(c, rows) -> list:
 
 
 def listar_concursos(aba="abertas", uf=None, area=None, curso=None, nivel=None,
-                     q=None, novos_dias=None, limite=200) -> list:
+                     q=None, novos_dias=None, ordem="recentes", limite=200) -> list:
     where, params = ["1=1"], []
     if aba == "abertas":
         where.append("status='inscricoes_abertas'")
@@ -213,9 +213,13 @@ def listar_concursos(aba="abertas", uf=None, area=None, curso=None, nivel=None,
         limite_data = (datetime.now() - timedelta(days=novos_dias)).isoformat(timespec="seconds")
         where.append("primeira_deteccao >= ?")
         params.append(limite_data)
+    if ordem == "antigos":
+        ordenacao = "primeira_deteccao ASC, id ASC"
+    else:
+        ordenacao = "primeira_deteccao DESC, id DESC"
     sql = (
         "SELECT * FROM concursos WHERE " + " AND ".join(where) +
-        " ORDER BY (status='inscricoes_abertas') DESC, primeira_deteccao DESC LIMIT ?"
+        f" ORDER BY {ordenacao} LIMIT ?"
     )
     params.append(int(limite))
     with conectar() as c:

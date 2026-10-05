@@ -1,4 +1,4 @@
-const estado = { aba: "abertas", uf: "", area: "", curso: "", nivel: "", q: "" };
+const estado = { aba: "abertas", ordem: "recentes", uf: "", area: "", curso: "", nivel: "", q: "" };
 let requisicaoAtual = 0;
 const ROTULO_STATUS = {
   previsto: "Previsto",
@@ -105,7 +105,7 @@ async function carregar() {
   const lista = document.getElementById("lista");
   const meuToken = ++requisicaoAtual;
   lista.innerHTML = `<div class="carregando">Carregando…</div>`;
-  const p = new URLSearchParams({ aba: estado.aba });
+  const p = new URLSearchParams({ aba: estado.aba, ordem: estado.ordem });
   for (const k of ["uf", "area", "curso", "nivel", "q"]) if (estado[k]) p.set(k, estado[k]);
   try {
     const r = await fetch("/api/concursos?" + p.toString());
@@ -160,7 +160,7 @@ document.getElementById("stats").addEventListener("click", e => {
   if (ch) setAba(ch.dataset.aba);
 });
 
-for (const [id, chave] of [["f-uf", "uf"], ["f-area", "area"], ["f-curso", "curso"], ["f-nivel", "nivel"]]) {
+for (const [id, chave] of [["f-ordem", "ordem"], ["f-uf", "uf"], ["f-area", "area"], ["f-curso", "curso"], ["f-nivel", "nivel"]]) {
   document.getElementById(id).addEventListener("change", e => {
     estado[chave] = e.target.value;
     carregar();
@@ -172,8 +172,9 @@ document.getElementById("f-q").addEventListener("input", e => {
   timerQ = setTimeout(() => { estado.q = e.target.value.trim(); carregar(); }, 300);
 });
 document.getElementById("btn-limpar").addEventListener("click", () => {
-  Object.assign(estado, { uf: "", area: "", curso: "", nivel: "", q: "" });
+  Object.assign(estado, { ordem: "recentes", uf: "", area: "", curso: "", nivel: "", q: "" });
   for (const id of ["f-uf", "f-area", "f-curso", "f-nivel", "f-q"]) document.getElementById(id).value = "";
+  document.getElementById("f-ordem").value = "recentes";
   carregar();
 });
 

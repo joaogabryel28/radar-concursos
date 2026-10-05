@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Radar Concursos — editais abertos e previstos</title>
-  <link rel="stylesheet" href="/static/style.css?v=3">
+  <link rel="stylesheet" href="/static/style.css?v=4">
 </head>
 <body>
   <header class="topo">
@@ -23,6 +23,10 @@
   </nav>
 
   <div class="filtros" id="filtros">
+    <select id="f-ordem" title="Ordenar por data de detecção">
+      <option value="recentes">Mais recentes</option>
+      <option value="antigos">Mais antigos</option>
+    </select>
     <select id="f-uf"><option value="">Estado</option></select>
     <select id="f-area"><option value="">Área</option></select>
     <select id="f-curso"><option value="">Curso</option></select>
@@ -46,6 +50,6 @@
     Os dados são um alerta inicial — <strong>confira sempre o edital oficial</strong> antes de se inscrever.
   </footer>
 
-  <script src="/static/app.js?v=3"></script>
+  <script src="/static/app.js?v=4"></script>
 </body>
 </html>
