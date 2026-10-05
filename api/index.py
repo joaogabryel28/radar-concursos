@@ -19,16 +19,3 @@ for raiz in (AQUI.parent, AQUI):
         break
 
 from app.main import app  # noqa: E402
-
-# Diagnostico temporario: mostra o que o runtime entrega ao ASGI.
-@app.api_route("/{caminho:path}", methods=["GET", "POST"], include_in_schema=False)
-async def _diagnostico_caminho(request, caminho: str):
-    return {
-        "rota_coringa_recebida": caminho,
-        "scope_path": request.scope.get("path"),
-        "root_path": request.scope.get("root_path"),
-        "x_matched_path": request.headers.get("x-matched-path"),
-        "x_forwarded": request.headers.get("x-forwarded-uri")
-        or request.headers.get("x-forwarded-path"),
-        "url": str(request.url),
-    }

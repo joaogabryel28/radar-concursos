@@ -5,3 +5,7 @@ __pycache__/
 data/editais/
 data/concurso.db-wal
 data/concurso.db-shm
+
+.vercel
+.env*
+.env.local
