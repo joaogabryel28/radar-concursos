@@ -86,6 +86,24 @@ app/
 - As manchetes de notícia viram registros com menos campos; servem de alerta e apontam para a notícia.
 - Colisões raras de dedupe podem mesclar concursos de órgãos com nome igual no mesmo estado/ano.
 
+## Deploy (GitHub Actions + Vercel) — já configurado
+
+O sistema roda 24/7 sem servidor dedicado:
+
+1. **GitHub Actions** (`.github/workflows/coleta.yml`) coleta a cada 3 horas
+   (`0 */3 * * *` UTC), atualiza `data/concurso.db` e também `api/data/concurso.db`
+   (a copia incluida no bundle da funcao, ja em journal DELETE) e faz commit/push.
+2. O push dispara automaticamente o **redeploy na Vercel**, que serve o site
+   lendo o banco em modo somente-leitura (`immutable=1`, necessario pois o
+   filesystem do serverless e read-only e bancos em WAL exigem criar -shm).
+3. Nao use `rewrites` no vercel.json para apontar tudo a uma funcao Python:
+   o ASGI recebe o caminho do destino (`/api/index.py`) e nenhuma rota casa —
+   use a sintaxe legada `routes`, que preserva o caminho original.
+
+Para o botao "Buscar agora" disparar a coleta remotamente, defina na Vercel as
+variaveis `GITHUB_REPO` (ex.: `usuario/repo`) e `GITHUB_DISPATCH_TOKEN` (PAT com
+permissao de Actions).
+
 ## Fase 2 (planejado)
 
 - Playwright para Cebraspe/VUNESP/IDECAN e detalhamento por cargo (tabela do anexo).
